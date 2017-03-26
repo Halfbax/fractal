@@ -1,4 +1,4 @@
-﻿namespace FA_Fraktale
+﻿namespace Leonsporsde.Fractal
 {
     partial class FractalWindow
     {

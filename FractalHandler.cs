@@ -1,18 +1,28 @@
 ﻿using System;
 using System.Drawing;
+using Leonsporsde.Utilities;
 using System.Threading;
 
-namespace FA_Fraktale
+namespace Leonsporsde.Fractal
 {
     class FractalHandler
     {
-        Thread renderThread;
         Loader loader;
-        Bitmap datasource;
+        Bitmap fractalClear;
+        Bitmap fractalRect;
 
         int panelWidth, panelHeight;
         double xMin, yMin, xMax, yMax = 0.0;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="height">this.getHeight()</param>
+        /// <param name="width">this.getWidth()</param>
+        /// <param name="sx"></param>
+        /// <param name="fx"></param>
+        /// <param name="sy"></param>
+        /// <param name="fy"></param>
         public FractalHandler(int height, int width, double sx, double fx, double sy, double fy)
         {
             this.panelHeight = height;
@@ -25,37 +35,48 @@ namespace FA_Fraktale
             Logger.Log(SecruityLevel.INFO, String.Concat(sx + " | " + fx + " | " + sy + " | " + fy));
         }
 
+        /// <summary>
+        /// Intialize
+        /// </summary>
         public void init()
         {
-            datasource = null;
+            fractalClear = null;
+            fractalRect = null;
             loader = new Loader("RedEdge.ColorMap");
         }
 
+        /// <summary>
+        /// Generates the Mandelbrot fractal
+        /// </summary>
         public void render()
         {
             Color[] colorCollection = loader.GetColorCollection();
 
-            datasource = Fractal.generateMandel(colorCollection, panelWidth, panelHeight, xMin, xMax, yMin, yMax);
+            fractalClear = Fractal.generateMandel(colorCollection, panelWidth, panelHeight, xMin, xMax, yMin, yMax);
+            fractalRect = fractalClear;
         }
 
-        public void RenderMouseEvent(Point e, Point pStart)
+        /// <summary>
+        /// MouseEvent
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="pStart"></param>
+        public void onMouseLeftClickReleaseEvent(Point e, Point pStart)
         {
-            //renderThread.Abort();
-            /*renderThread = new Thread(delegate () {
-                Fractal.generateRectangleOnBitmap(datasource, panelWidth, panelHeight, e, pStart);
-            });
-            renderThread.Start();
-            renderThread.Join();
-            */
-            if (datasource != null)
+
+            if (fractalClear != null)
             {
-                datasource = Fractal.generateRectangleOnBitmap(datasource, panelWidth, panelHeight, e, pStart);
+                fractalRect = Fractal.generateRectangleOnBitmap(fractalClear, panelWidth, panelHeight, e, pStart);
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Bitmap getDataSource()
         {
-            return datasource;
+            return fractalRect;
         }
     }
 }

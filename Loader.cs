@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Leonsporsde.Utilities;
+using System.Threading;
 
-namespace FA_Fraktale
+namespace Leonsporsde
 {
     class Loader
     {
